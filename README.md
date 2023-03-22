@@ -1,22 +1,19 @@
-# Solar Irradiance Prediction using Deep Neural Network.
-[![Python 3.10](https://img.shields.io/badge/Python-3.10-orange)](https://www.python.org/downloads/release/python-3102/)
-[![License](https://img.shields.io/badge/License-MIT-yellowgreen)](https://github.com/marianSTU/solar-irradiance-prediction/blob/main/LICENSE)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.11.1-brightgreen)](https://www.tensorflow.org/api_docs)
-[![Keras](https://img.shields.io/badge/Keras-API-green)](https://keras.io/guides/functional_api/)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.5.3-red)](https://matplotlib.org/3.5.3/api/_as_gen/matplotlib.pyplot.html)
-[![SkyCam](https://img.shields.io/badge/Dataset-SkyCam-blueviolet)](https://github.com/vglsd/SkyCam)
-[![Author](https://img.shields.io/badge/Author-Bc.Marián_Šebeňa-blue)](https://is.stuba.sk/lide/clovek.pl?id=97945;)
+## Short documentation
+This code is a set of functions that work together to merge a sequence of images into one image. The images are named with a specific format, and the function control_sequence_existence checks if the sequence of images is complete and ready for merging. The images are merged using the function merger and then saved as a new image.
 
-This repository contains the implementation and results of my master thesis on predicting solar irradiance for renewable energy using deep neural network methods.
-## **Goal**
-The main goal of this project is to develop an accurate solar irradiance prediction model that can be used to optimize the performance of solar energy systems. Three different deep neural network methods are implemented, including **Convolutional Neural Network (CNN)**, **Long Short-Term Memory (LSTM)**, and **Multi-Layer Perceptron (MLP)**, to explore the potential of different architectures for solar irradiance prediction.
-## **Data**
-The project utilizes available [SkyCam](https://github.com/vglsd/SkyCam): A Dataset of Sky Images and their Irradiance values. This dataset contains solar irradiance, sky images and weather data collected from different weather stations in Switzerland. The data is preprocessed and feature engineered to obtain the input data for the deep neural network models. The performance of the models is evaluated using different metrics, such as mean squared error, mean absolute error, and root mean squared error.
-## **Technologies**
-The project is implemented using **Python** programming language and various machine learning libraries, such as **Keras** and **TensorFlow**. The repository contains all the necessary code, data, and results for the project. The code is well-documented and organized into different modules for better readability and modularity.
-## **Conclusion**
-This project can be useful for researchers and practitioners in the renewable energy industry who are interested in solar irradiance prediction using deep neural network methods. The results of this project can provide insights into the performance of different deep neural network architectures for solar irradiance prediction and help to optimize the performance of solar energy systems.
-## **Thanks**
-I would like to express my sincere gratitude to my master thesis leader, **Ing. Juraj Kačur, PhD.**, for his guidance, expertise, and support throughout the project. His valuable feedback and insightful suggestions have been instrumental in shaping the direction and quality of the project.
+The code uses the following libraries:
 
-I would also like to extend my thanks to the dataset authors, **Evangelos Ntavelis**, **Jan Remund** and **Philipp Schmid**, for providing the private available solar irradiance and weather data used in this project. Their efforts in collecting and publishing the data have made it possible for me to explore the potential of solar energy systems.
+PIL for handling images.
+logging and coloredlogs for logging messages with colors.
+datetime for handling date and time data.
+csv for reading data from CSV files.
+os for checking if a file exists.
+The code starts by defining some constants such as the number of images in the sequence, the month, the year, the exposure time, and the image size. It also defines some paths and the name of the final image.
+
+The first function, explore_csv, takes a filename and a rowname as input and returns a tuple containing the values of 'PictureName', 'Irradiance', and 'DateTime' of the row where the 'PictureName' matches the given rowname. The second function, explore_csv_irr, takes a filename and a rowname as input and returns the value of 'Irradiance' of the row where the 'PictureName' matches the given rowname.
+
+The function get_next_filename takes a filename and a time_next (in minutes) and computes the next date string by adding the given time_next to the current date string. It then returns a new filename that consists of the location, next date, and end string.
+
+The function control_sequence_existence takes a filename and checks if the corresponding original data file exists. If it does, the function continues checking for the existence of the next 5 files with 15 minute intervals between them. If all 5 files exist, the function returns the original filename. If any file is missing, the function continues to search for the next 5 files. If the end file is reached and all files are present, the function returns 'EOF'.
+
+Finally, the function merger takes a filename and a csv writer and merges the sequence of images starting from the given filename. It saves the merged image as a new image.
