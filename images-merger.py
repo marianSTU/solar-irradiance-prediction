@@ -132,7 +132,6 @@ def merger(filename, csv_writer):
     next_sequence_start = filename
     i = 0
     while True:
-        print(i)
         filename = next_sequence_start
         filename = control_sequence_existence(filename)
 
