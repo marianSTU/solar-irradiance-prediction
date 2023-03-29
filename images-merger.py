@@ -6,14 +6,17 @@ import csv
 import os
 
 NUM_OF_SEQUENCE = 5
-MONTH = '06'
+MONTH = '09'
 LAST_DAY = '30'
 YEAR = '2018'
 EXPO_TIME = '10'
 IMAGE_SIZE = 64
-ORIGINAL_DATA_PATH = f'summer_exposure{EXPO_TIME}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}/original'
-DIR_PATH = f'summer_exposure{EXPO_TIME}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}'
-END_FILE = f'Alpnach_{YEAR}{MONTH}{LAST_DAY}_23-45-00_ExposureStack_Image_{EXPO_TIME}_image.png'
+LOCATION = 'NE'
+
+
+ORIGINAL_DATA_PATH = f'expo{EXPO_TIME}_{LOCATION}{YEAR}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}/original'
+DIR_PATH = f'expo{EXPO_TIME}_{LOCATION}{YEAR}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}'
+END_FILE = f'{LOCATION}_{YEAR}{MONTH}{LAST_DAY}_23-45-00_ExposureStack_Image_{EXPO_TIME}_image.png'
 
 
 def explore_csv(filename, rowname):
@@ -54,6 +57,17 @@ def explore_csv_irr(filename, rowname):
         for row in reader:
             if row['PictureName'] == rowname:
                 return row['Irradiance']
+
+
+def parse_date(filename, rowname):
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if row['PictureName'] == rowname:
+                date_string = row['DateTime'].split('.', maxsplit=1)[0]
+
+                date_datetime = datetime.datetime.strptime(date_string, "%m/%d/%Y %H:%M:%S")
+                return date_datetime.day, date_datetime.hour, date_datetime.minute
 
 
 def get_next_filename(filename, time_next):
@@ -141,20 +155,24 @@ def merger(filename, csv_writer):
 
         irradiances = []
         images = []
-
+        day, hour, minutes = 0, 0, 0
         for y in range(0, NUM_OF_SEQUENCE):
             irradiances.append(explore_csv_irr(f'{DIR_PATH}/out_data.csv', filename))
             image = Image.open(f'{ORIGINAL_DATA_PATH}/{filename}')
             images.append(image.resize((IMAGE_SIZE, IMAGE_SIZE)))
-            filename = get_next_filename(filename, 15)
-            if y == 1:
+            if y == 2:
                 next_sequence_start = filename
+            if y == 4:
+                day, hour, minutes = parse_date(f'{DIR_PATH}/out_data.csv', filename)
+            filename = get_next_filename(filename, 15)
 
         picture_name, irradiance, date_time = explore_csv(f'{DIR_PATH}/out_data.csv', filename)
 
         info = [picture_name,
-                f"{DIR_PATH}/sequences_test/{MONTH}_sequence{i}.png",
-                date_time,
+                f"{DIR_PATH}/sequences/{MONTH}_sequence{i}.png",
+                day,
+                hour,
+                minutes,
                 irradiance,
                 irradiances[0],
                 irradiances[1],
@@ -172,8 +190,8 @@ def merger(filename, csv_writer):
         new_image.paste(images[4], (4 * IMAGE_SIZE, 0))
 
         csv_writer.writerow(info)
-        new_image.save(f"{DIR_PATH}/sequences_test/{MONTH}_sequence{i}.png")
-        logging.info(f'Sequence: {info} successfully saved')
+        new_image.save(f"{DIR_PATH}/sequences/{MONTH}_sequence{i}.png")
+        logging.info(f'Sequence{i}: {info} successfully saved')
         i += 1
 
 
@@ -186,11 +204,15 @@ def main():
     logging.getLogger().setLevel(logging.INFO)
     coloredlogs.install(level='INFO')
     filename = os.listdir(f'{ORIGINAL_DATA_PATH}/')[0]
-    csv_file = open(f'{DIR_PATH}/{MONTH}_{YEAR}_expo{EXPO_TIME}_test.csv', 'w')
+    if not os.path.exists(f'expo{EXPO_TIME}_{LOCATION}{YEAR}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}/sequences'):
+        os.mkdir(f'expo{EXPO_TIME}_{LOCATION}{YEAR}/{MONTH}_{YEAR}_complete_exposure{EXPO_TIME}/sequences')
+    csv_file = open(f'{DIR_PATH}/{MONTH}_{YEAR}_expo{EXPO_TIME}.csv', 'w')
     csv_writer = csv.writer(csv_file, delimiter=',')
     header = ['PictureName',
               'Path',
-              'DateTime',
+              'Day',
+              'Hour',
+              'Minute',
               'IrradianceToPredict',
               'IrradianceFirst',
               'IrradianceSecond',
