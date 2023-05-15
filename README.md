@@ -7,6 +7,8 @@
 [![SkyCam](https://img.shields.io/badge/Dataset-SkyCam-blueviolet)](https://github.com/vglsd/SkyCam)
 [![Author](https://img.shields.io/badge/Author-Bc.Marián_Šebeňa-blue)](https://is.stuba.sk/lide/clovek.pl?id=97945;)
 
+## **NOTE: Repository is not in final stage please wait to 17.5.2023, when all documentation, source codes and user guide will ba available**
+
 This repository contains the implementation and results of my master thesis on predicting solar irradiance for renewable energy using deep neural network methods.
 ## **Goal**
 The main goal of this project is to develop an accurate solar irradiance prediction model that can be used to optimize the performance of solar energy systems. Three different deep neural network methods are implemented, including **Convolutional Neural Network (CNN)**, **Long Short-Term Memory (LSTM)**, and **Multi-Layer Perceptron (MLP)**, to explore the potential of different architectures for solar irradiance prediction.
