@@ -7,7 +7,7 @@
 [![SkyCam](https://img.shields.io/badge/Dataset-SkyCam-blueviolet)](https://github.com/vglsd/SkyCam)
 [![Author](https://img.shields.io/badge/Author-Bc.Marián_Šebeňa-blue)](https://is.stuba.sk/lide/clovek.pl?id=97945;)
 
-## **NOTE: Repository is not in final stage please wait to 17.5.2023, when all documentation, source codes and user guide will ba available**
+## **NOTE: Repository is not in final stage please wait to 20.5.23, when all documentation, source codes and user guide will ba available**
 
 This repository contains the implementation and results of my master thesis on predicting solar irradiance for renewable energy using deep neural network methods.
 ## **Goal**
